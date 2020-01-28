@@ -1,7 +1,7 @@
 package pw.byakuren.slond
 
 import org.bukkit.entity.Player
-import org.bukkit.{Bukkit, ChatColor, Sound, World}
+import org.bukkit.{Bukkit, ChatColor, Sound}
 
 import scala.jdk.CollectionConverters._
 
@@ -11,7 +11,7 @@ class SlondAlerter extends Runnable {
     val allOnlinePlayers = Bukkit.getServer.getOnlinePlayers
     if (allOnlinePlayers.size()<2) return
     for ((_,players) <- allOnlinePlayers.asScala.groupBy(_.getWorld)) {
-      val (playersInBed, playersNotInBed) = players.partition(_.isSleeping)
+      val (playersInBed, playersNotInBed) = players.partition(p => p.isSleeping || p.isDead)
       if (playersInBed.nonEmpty) {
         for (player <- playersInBed) {
           if (playersNotInBed.nonEmpty) {
@@ -32,5 +32,4 @@ class SlondAlerter extends Runnable {
     p.sendTitle("Waiting on...", ChatColor.RED+(needToSleep.map(_.getName)).mkString(
       s"${ChatColor.RESET},${ChatColor.RED}"), 0, 20, 0)
   }
-
 }
