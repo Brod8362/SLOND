@@ -1,0 +1,5 @@
+name: SLOND
+main: pw.byakuren.slond.SlondPlugin
+description: "Sleep log or nether die"
+author: "Brod8362"
+version: "1.0"
