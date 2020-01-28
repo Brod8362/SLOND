@@ -10,10 +10,8 @@ class SlondAlerter extends Runnable {
   override def run(): Unit = {
     val allOnlinePlayers = Bukkit.getServer.getOnlinePlayers
     if (allOnlinePlayers.size()<2) return
-    val playerMap = allOnlinePlayers.asScala.groupBy(_.getWorld)
-    val worlds = playerMap.keySet
-    for (world <- worlds) {
-      val (playersInBed, playersNotInBed) = playerMap(world).partition(_.isSleeping)
+    for ((_,players) <- allOnlinePlayers.asScala.groupBy(_.getWorld)) {
+      val (playersInBed, playersNotInBed) = players.partition(_.isSleeping)
       if (playersInBed.nonEmpty) {
         for (player <- playersInBed) {
           if (playersNotInBed.nonEmpty) {
