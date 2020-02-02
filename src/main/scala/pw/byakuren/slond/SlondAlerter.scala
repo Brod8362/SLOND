@@ -11,7 +11,7 @@ class SlondAlerter extends Runnable {
     val allOnlinePlayers = Bukkit.getServer.getOnlinePlayers
     if (allOnlinePlayers.size()<2) return
     for ((_,players) <- allOnlinePlayers.asScala.groupBy(_.getWorld)) {
-      val (playersInBed, playersNotInBed) = players.partition(p => p.isSleeping || p.isDead)
+      val (playersInBed, playersNotInBed) = players.filter(!_.isDead).partition(_.isSleeping)
       if (playersInBed.nonEmpty) {
         for (player <- playersInBed) {
           if (playersNotInBed.nonEmpty) {
@@ -21,7 +21,7 @@ class SlondAlerter extends Runnable {
           }
         }
         for (player <- playersNotInBed) {
-          player.sendTitle("", ChatColor.RED+"SLOND!")
+          player.sendTitle("", ChatColor.RED+"SLOND!", 5, 20, 0)
           player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 1f)
         }
       }
